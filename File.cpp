@@ -1,4 +1,5 @@
 #include "File.hpp"
+#include <regex>
       
 std::string File::getName() const {
    return filename_;
@@ -21,16 +22,16 @@ void File::setIcon(int* new_icon) {
    icon_ = new_icon;
 } 
 
-// std::ostream& operator<< (std::ostream& os, const File& target) {
-//    os << "Name: " << target.getName() << std::endl;
-//    os << "Size: " << target.getSize() << " bytes" << std::endl;
-//    os << "Contents: " << target.getContents(); 
-//    return os;
-// }
+std::ostream& operator<< (std::ostream& os, const File& target) {
+   os << "Name: " << target.getName() << std::endl;
+   os << "Size: " << target.getSize() << " bytes" << std::endl;
+   os << "Contents: " << target.getContents(); 
+   return os;
+}
 
-// bool File::operator<(const File& rhs) const {
-//    return getName() < rhs.getName();
-// }
+bool File::operator<(const File& rhs) const {
+   return getName() < rhs.getName();
+}
 
 //                       DO NOT EDIT ABOVE THIS LINE. 
 //             (unless you want your work to be tested incorrectly)
@@ -73,31 +74,10 @@ File::File(const std::string& filename, const std::string& contents , int* icon)
    }
    }
 
-int File::getSize(File file_input)
-{
-   return contents_.size();
+size_t File::getSize() const {
+    return contents_.size();
 }
 
-// File::File(const File& rhs) 
-// {
-//         // Deep copy of filename
-//    filename_ = rhs.filename_;
-
-//         // Deep copy of contents
-//    contents_ = rhs.contents_;
-
-//         // Deep copy of icon (if necessary)
-//    if (rhs.icon_ != nullptr) 
-//    {
-//       icon_dim = rhs.icon_dim;
-//       icon_ = new int[icon_dim];
-//       std::copy(rhs.icon_, rhs.icon_ + icon_dim, icon_);
-//    } 
-//    else 
-//    {
-//       icon_ = nullptr;
-//    }
-//    }
 
 File::File(const File& rhs)
 {

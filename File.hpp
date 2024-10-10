@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InvalidFormatException.hpp"
-#include <regex>
 
 class File {
    private:
@@ -15,13 +14,13 @@ class File {
       /**
        * @brief Enables printing the object via std::cout
        */
-      // friend std::ostream& operator<< (std::ostream& os, const File& target);
+      friend std::ostream& operator<< (std::ostream& os, const File& target);
 
       /**
        * @brief Overloads the less than comparison operator. 
        * @return True if the name of the File alphabetically precedes the name of the rhs. False otherwise.
        */
-      // bool operator<(const File& rhs) const;
+      bool operator<(const File& rhs) const;
 
       /**
        * @brief Get the value stored in name_
@@ -76,8 +75,7 @@ class File {
       * @return size_t The number of bytes the File's contents consumes
       * @note Consider this: how does this relate to the string's length? Why is that the case?
       */
-      int getSize(File file_input);
-
+      size_t getSize()const;
       /**
        * @brief (COPY CONSTRUCTOR) Constructs a new File object as a deep copy of the target File
        * @param rhs A const reference to the file to be copied from
