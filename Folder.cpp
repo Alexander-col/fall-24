@@ -71,3 +71,86 @@ void Folder::display() {
 //             (unless you want your work to be tested incorrectly)
 //    That also means includes. Remember, all other includes go in .hpp
 // =========================== YOUR CODE HERE ===========================
+
+
+
+size_t Folder::getSize()
+{
+   size_t total = 0;
+   for(const File& file : files_)
+   {
+      total += file.getSize();
+   }
+}
+
+
+bool Folder::addFile(File&& newFile)
+{
+   if(newFile.getName().empty())
+   {
+      return false;
+   }
+   
+   for (const File& file: files_)
+   {
+      if(file.getName() == newFile.getName())
+      {
+         return false;
+      }
+   }
+   files_.push_back(std::move(newFile));
+   return true;
+}
+
+
+bool Folder::removeFile(const std::string& name) {
+    for (auto it = files_.begin(); it != files_.end(); ++it) {
+        if (it->getName() == name) {
+            files_.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Folder::moveFileTo(const std::string& name, Folder& destination) 
+{
+    if (this == &destination) 
+    {
+        return true; // Moving within the same folder is always successful
+    }
+
+    for (auto it = files_.begin(); it != files_.end(); ++it) 
+    {
+        if (it->getName() == name) {
+            if (!destination.addFile(std::move(*it))) 
+            {
+                return false; // Failed to add to destination folder
+            }
+            files_.erase(it);
+            return true;
+        }
+    }
+    return false; // File not found in source folder
+}
+
+bool Folder::copyFileTo(const std::string& name, Folder& destination) 
+{
+    if (this == &destination) 
+    {
+        return false; // Copying within the same folder is not allowed
+    }
+
+    for (const File& file : files_) 
+    {
+        if (file.getName() == name) 
+        {
+            if (!destination.addFile(File(file))) 
+            {
+                return false; // Failed to add to destination folder
+            }
+            return true;
+        }
+    }
+    return false; // File not found in source folder
+}

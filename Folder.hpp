@@ -57,7 +57,7 @@ class Folder {
       * @brief Iterate through the files vector, calculating the total size of all child files
       * @return size_t The total size of all child files
       */
-     size_t getSize;
+     size_t getSize();
       
       /**
       * @brief Appends the given file to the files_ vector using move_semantics on the parameter File object, if a file with the same name does not exist within the files_ vector
