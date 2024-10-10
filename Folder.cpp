@@ -103,9 +103,12 @@ bool Folder::addFile(File&& newFile)
 }
 
 
-bool Folder::removeFile(const std::string& name) {
-    for (auto it = files_.begin(); it != files_.end(); ++it) {
-        if (it->getName() == name) {
+bool Folder::removeFile(const std::string& name) 
+{
+    for (auto it = files_.begin(); it != files_.end(); ++it) 
+    {
+        if (it->getName() == name) 
+        {
             files_.erase(it);
             return true;
         }
@@ -117,40 +120,41 @@ bool Folder::moveFileTo(const std::string& name, Folder& destination)
 {
     if (this == &destination) 
     {
-        return true; // Moving within the same folder is always successful
+        return true; 
     }
 
     for (auto it = files_.begin(); it != files_.end(); ++it) 
     {
-        if (it->getName() == name) {
+        if (it->getName() == name) 
+         {
             if (!destination.addFile(std::move(*it))) 
             {
-                return false; // Failed to add to destination folder
+                return false; 
             }
             files_.erase(it);
             return true;
         }
     }
-    return false; // File not found in source folder
+    return false; 
 }
 
 bool Folder::copyFileTo(const std::string& name, Folder& destination) 
 {
-    if (this == &destination) 
-    {
-        return false; // Copying within the same folder is not allowed
-    }
+   if (this == &destination) 
+   {
+      return false; 
+   }
 
-    for (const File& file : files_) 
-    {
-        if (file.getName() == name) 
-        {
-            if (!destination.addFile(File(file))) 
-            {
-                return false; // Failed to add to destination folder
-            }
+   for (const File& file : files_) 
+   {
+      if (file.getName() == name) 
+      {
+         if (!destination.addFile(File(file))) 
+         {
+            return false; 
+         }
             return true;
-        }
-    }
-    return false; // File not found in source folder
+      }
+   }
+    return false;
 }

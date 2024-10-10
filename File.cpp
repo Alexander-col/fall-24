@@ -43,20 +43,20 @@ bool File::operator<(const File& rhs) const {
 //    std::cout << a << std::endl;
 
 // =========================== YOUR CODE HERE ===========================
-File::File(const std::string& filename, const std::string& contents , int* icon) 
+File::File(const std::string& filename, const std::string& contents, int* icon) 
 {
  
    std::regex pattern(R"([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)?)");
    if (!std::regex_match(filename, pattern)) 
-      {
-         throw InvalidFormatException();
-      }
+   {
+      throw InvalidFormatException();
+   }
 
    filename_ = filename;
    if (filename.find('.') == std::string::npos || filename.find('.') + 1 == filename.length()) 
-      {
-         filename_ += ".txt";
-      }
+   {
+      filename_ += ".txt";
+   }
 
 
    if(contents.empty())
@@ -74,37 +74,41 @@ File::File(const std::string& filename, const std::string& contents , int* icon)
    }
    }
 
-size_t File::getSize() const {
-    return contents_.size();
+size_t File::getSize() const 
+{
+   return contents_.size();
 }
 
 
 File::File(const File& rhs)
 {
-        // Deep copy of filename and contents
-        filename_ = rhs.filename_;
-        contents_ = rhs.contents_;
+   filename_ = rhs.filename_;
+   contents_ = rhs.contents_;
 
-        // Deep copy of icon (if necessary)
-        if (rhs.icon_ != nullptr) {
+   if (rhs.icon_ != nullptr) 
+   {
+      icon_ = new int[ICON_DIM];
+      std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
+   } 
+   else 
+   {
+      icon_ = nullptr;
+   }
+}
+
+File& File::operator=(const File& rhs) 
+{
+   if (this != &rhs) 
+   {
+      filename_ = rhs.filename_;
+      contents_ = rhs.contents_;
+
+        if (rhs.icon_ != nullptr) 
+        {
             icon_ = new int[ICON_DIM];
             std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
-        } else {
-            icon_ = nullptr;
-        }
-    }
-
-File& File::operator=(const File& rhs) {
-    if (this != &rhs) { // Avoid self-assignment
-        filename_ = rhs.filename_;
-        contents_ = rhs.contents_;
-
-        // Deep copy of icon (if necessary)
-        if (rhs.icon_ != nullptr) {
-            // ICON_DIM = rhs.ICON_DIM;
-            icon_ = new int[ICON_DIM];
-            std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
-        } else {
+        } else 
+        {
             icon_ = nullptr;
         }
     }
@@ -113,38 +117,32 @@ File& File::operator=(const File& rhs) {
 
 File::File(File&& rhs) 
 {
-    // Move filename and contents
     filename_ = std::move(rhs.filename_);
     contents_ = std::move(rhs.contents_);
 
-    // Move icon (if necessary)
     icon_ = std::move(rhs.icon_);
 
-    // Reset rhs members
     rhs.icon_ = nullptr;
 }
 
 File& File::operator=(File&& rhs)
 {
-    if (this != &rhs) {
-        // Move filename and contents
-        filename_ = std::move(rhs.filename_);
-        contents_ = std::move(rhs.contents_);
+   if (this != &rhs) 
+   {
+      filename_ = std::move(rhs.filename_);
+      contents_ = std::move(rhs.contents_);
 
-        // Move icon (if necessary)
-        icon_ = std::move(rhs.icon_);
+      icon_ = std::move(rhs.icon_);
 
-        // Reset rhs members
-        rhs.icon_ = nullptr;
-    }
+      rhs.icon_ = nullptr;
+   }
     return *this;
 }
 
 File::~File() 
 {
-    // Deallocate the icon array if necessary
-    if (icon_ != nullptr) 
-    {
-        delete[] icon_;
-    }
+   if (icon_ != nullptr) 
+   {
+      delete[] icon_;
+   }
 }

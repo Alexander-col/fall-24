@@ -6,7 +6,7 @@
 int main()
 {
 
-    std::cout << "I AM GOING TO KASHOOT MYSELF" << std::endl;
+    std::cout << "I AM GOING TO KAHOOT MYSELF" << std::endl;
     
     int test = 26;
     int* test_ptr = &test;
