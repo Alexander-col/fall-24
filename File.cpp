@@ -43,40 +43,28 @@ bool File::operator<(const File& rhs) const {
 
 // =========================== YOUR CODE HERE ===========================
 
-File::File(const std::string& filename, std::string contents, int* icon):contents_(contents)
-{
-    int periodCount = 0;
-    for(char c : filename)
+File::File(const std::string& filename, std::string contents, int* icon)
+    : filename_(filename), contents_(contents), icon_(nullptr) 
     {
-        if(!std::isalnum(c) && c!= '.')
+    int periodCount = 0;
+    for (char c : filename) 
+    {
+        if (!std::isalnum(c) && c != '.') 
         {
             throw InvalidFormatException();
-        }else if(c == ',')
-        {
+        } else if (c == '.') {
             periodCount++;
         }
     }
 
-    if(filename == "")
-    {
-        filename_ == "NewFile.txt";
-    }else if (periodCount > 1)
-    {
+    if (filename == "") {
+        filename_ = "NewFile.txt";
+    } else if (periodCount > 1) {
         throw InvalidFormatException();
-    }else if (periodCount == 0)
-    {
+    } else if (periodCount == 0) {
         filename_ = filename + ".txt";
     }
-    else if (filename[filename.size()-1] == '.')
-    {
-        filename_ = filename + "txt";
-    }else 
-    {
-        filename_ = filename;
-    }
-
-    icon_ = new int[ICON_DIM];
-    }
+}
 
 
 size_t File::getSize() const

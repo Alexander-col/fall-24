@@ -12,12 +12,17 @@ int main()
     }
 
     // Create a File object
+    std::cout << "----------Below is code for testing File.cpp---------" << std::endl;
+    
     File myFile("example.txt", "This is the file contents.", icon);
     std::cout << myFile << std::endl;
 
     Folder John("John");
+
+
     John.addFile(myFile);
     John.display();
+
     // // Print the File object
     // std::cout << myFile << std::endl;
 

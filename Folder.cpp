@@ -81,80 +81,97 @@ size_t Folder::getSize()const
    {
       total += file.getSize();
    }
+   return total;
 }
 
 
-bool Folder::addFile(File& newFile)
+bool Folder::addFile(File& newFile) 
 {
-   if(newFile.getName().empty())
-   {
-      return false;
-   }
-   
-   for (const File& file: files_)
-   {
-      if(file.getName() == newFile.getName())
-      {
-         return false;
-      }
-   }
-   files_.push_back(std::move(newFile));
-   return true;
+    // Check if a file with the same name already exists
+    if (std::any_of(files_.begin(), files_.end(), [&newFile](const File& file) {
+        return file.getName() == newFile.getName();
+    })) {
+        return false; // File already exists
+    }
+
+    // If the name is empty, don't add the file
+    if (newFile.getName().empty()) {
+        return false;
+    }
+
+    // Add the file using move semantics
+    files_.push_back(std::move(newFile));
+    return true;
 }
 
 
-// bool Folder::removeFile(const std::string& name) 
-// {
-//     for (auto it = files_.begin(); it != files_.end(); ++it) 
-//     {
-//         if (it->getName() == name) 
-//         {
-//             files_.erase(it);
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+bool Folder::removeFile(const std::string& name) {
+    auto it = std::find_if(files_.begin(), files_.end(), [&name](const File& file) {
+        return file.getName() == name;
+    });
 
-// bool Folder::moveFileTo(const std::string& name, Folder& destination) 
-// {
-//     if (this == &destination) 
-//     {
-//         return true; 
-//     }
+    if (it != files_.end()) {
+        files_.erase(it);
+        return true;
+    }
 
-//     for (auto it = files_.begin(); it != files_.end(); ++it) 
-//     {
-//         if (it->getName() == name) 
-//          {
-//             if (!destination.addFile(std::move(*it))) 
-//             {
-//                 return false; 
-//             }
-//             files_.erase(it);
-//             return true;
-//         }
-//     }
-//     return false; 
-// }
+    return false;
+}
 
-// bool Folder::copyFileTo(const std::string& name, Folder& destination) 
-// {
-//    if (this == &destination) 
-//    {
-//       return false; 
-//    }
+bool Folder::moveFileTo(const std::string& name, Folder& destination) {
+    // Find the file to be moved in the current folder
+    auto it = std::find_if(files_.begin(), files_.end(), [&name](const File& file) {
+        return file.getName() == name;
+    });
 
-//    for (const File& file : files_) 
-//    {
-//       if (file.getName() == name) 
-//       {
-//          if (!destination.addFile(File(file))) 
-//          {
-//             return false; 
-//          }
-//             return true;
-//       }
-//    }
-//     return false;
-// }
+    // Check if the file exists in the current folder
+    if (it == files_.end()) {
+        return false; // File not found
+    }
+
+    // Check if the destination folder is the same as the current folder
+    if (this == &destination) {
+        return true; // Moving within the same folder is always successful
+    }
+
+    // Check if the destination folder already contains a file with the same name
+    if (std::any_of(destination.files_.begin(), destination.files_.end(), [&name](const File& file) {
+        return file.getName() == name;
+    })) {
+        return false; // File already exists in the destination folder
+    }
+
+    // Move the file to the destination folder
+    destination.files_.push_back(std::move(*it));
+    files_.erase(it);
+    return true;
+}
+
+bool Folder::copyFileTo(const std::string& name, Folder& destination) 
+{
+    // Find the file to be copied in the current folder
+    auto it = std::find_if(files_.begin(), files_.end(), [&name](const File& file) {
+        return file.getName() == name;
+    });
+
+    // Check if the file exists in the current folder
+    if (it == files_.end()) {
+        return false; // File not found
+    }
+
+    // Check if the destination folder is the same as the current folder
+    if (this == &destination) {
+        return false; // Copying within the same folder is not allowed
+    }
+
+    // Check if the destination folder already contains a file with the same name
+    if (std::any_of(destination.files_.begin(), destination.files_.end(), [&name](const File& file) {
+        return file.getName() == name;
+    })) {
+        return false; // File already exists in the destination folder
+    }
+
+    // Create a copy of the file and add it to the destination folder
+    destination.files_.push_back(File(*it));
+    return true;
+}
