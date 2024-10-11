@@ -52,18 +52,32 @@ File::File(const std::string& filename, std::string contents, int* icon)
         if (!std::isalnum(c) && c != '.') 
         {
             throw InvalidFormatException();
-        } else if (c == '.') {
+        } else if (c == '.') 
+        {
             periodCount++;
         }
     }
 
-    if (filename == "") {
+    if (filename == "")
+    {
         filename_ = "NewFile.txt";
-    } else if (periodCount > 1) {
+    } else if (periodCount > 1) 
+    {
         throw InvalidFormatException();
-    } else if (periodCount == 0) {
+    } else if (periodCount == 0) 
+    {
         filename_ = filename + ".txt";
     }
+
+        // Allocate memory for the icon array
+    icon_ = new int[ICON_DIM];
+
+    // Copy the icon array if provided
+    if (icon) 
+    {
+        std::copy(icon, icon + ICON_DIM, icon_);
+    }
+    
 }
 
 
@@ -82,19 +96,24 @@ File::File(const File& rhs) :
 
 File& File::operator=(const File& rhs) 
 {
-    if (this != &rhs) {
+    if (this != &rhs) 
+    {
         filename_ = rhs.filename_;
         contents_ = rhs.contents_;
 
-        // Delete the old icon array
-        delete[] icon_;
 
-        // Create a new icon array and copy elements
+        if (icon_) 
+        {
+            delete[] icon_;
+        }
+
+
         icon_ = new int[ICON_DIM];
         std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
     }
     return *this;
 }
+
 
 File::File(File&& rhs) :
     filename_(std::move(rhs.filename_)),
@@ -106,11 +125,12 @@ File::File(File&& rhs) :
     
 File& File::operator=(File&& rhs) 
 {
-    if (this != &rhs) {
+    if (this != &rhs) 
+    {
         filename_ = std::move(rhs.filename_);
         contents_ = std::move(rhs.contents_);
 
-        // Move the icon array
+
         delete[] icon_;
         icon_ = rhs.icon_;
         rhs.icon_ = nullptr;
@@ -118,7 +138,8 @@ File& File::operator=(File&& rhs)
     return *this;
 }
 
-File::~File() {
+File::~File() 
+{
     delete[] icon_;
 }
 
