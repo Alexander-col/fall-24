@@ -1,18 +1,39 @@
 #include <iostream>
 #include "File.hpp"
 #include "Folder.hpp"
-// #include "Folder.hpp"
-// #include "InvalidFormatException.hpp"
-int main()
+
+int main() 
 {
+    // Create an icon array
+    int icon[256];
+    for (size_t i = 0; i < 256; ++i) 
+    {
+        icon[i] = i; // Initialize with values for demonstration
+    }
 
-    std::cout << "I AM GOING TO KAHOOT MYSELF" << std::endl;
-    
-    int test = 26;
-    int* test_ptr = &test;
+    // Create a File object
+    File myFile("example.txt", "This is the file contents.", icon);
+    std::cout << myFile << std::endl;
 
-    std::cout << *test_ptr << std::endl;
-    File Alex("alexander.txt", "I like to code", test_ptr);
-    std::cout << Alex << std::endl;
+    Folder John("John");
+    John.addFile(myFile);
+    John.display();
+    // // Print the File object
+    // std::cout << myFile << std::endl;
 
+    // // Access and modify members
+    // std::cout << myFile.getName() << std::endl;
+    // std::cout << myFile.getContents() << std::endl;
+    // myFile.setContents("New contents");
+    // std::cout << myFile.getContents() << std::endl;
+
+    // // Create a copy of the File object
+    // File copiedFile = myFile;
+
+    // // Modify the original and check if the copy is affected
+    // myFile.setContents("Modified contents");
+    // std::cout << myFile.getContents() << std::endl;
+    // std::cout << copiedFile.getContents() << std::endl;
+
+    return 0;
 }

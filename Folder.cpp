@@ -74,7 +74,7 @@ void Folder::display() {
 
 
 
-size_t Folder::getSize()
+size_t Folder::getSize()const
 {
    size_t total = 0;
    for(const File& file : files_)
@@ -84,7 +84,7 @@ size_t Folder::getSize()
 }
 
 
-bool Folder::addFile(File&& newFile)
+bool Folder::addFile(File& newFile)
 {
    if(newFile.getName().empty())
    {
@@ -103,58 +103,58 @@ bool Folder::addFile(File&& newFile)
 }
 
 
-bool Folder::removeFile(const std::string& name) 
-{
-    for (auto it = files_.begin(); it != files_.end(); ++it) 
-    {
-        if (it->getName() == name) 
-        {
-            files_.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
+// bool Folder::removeFile(const std::string& name) 
+// {
+//     for (auto it = files_.begin(); it != files_.end(); ++it) 
+//     {
+//         if (it->getName() == name) 
+//         {
+//             files_.erase(it);
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
-bool Folder::moveFileTo(const std::string& name, Folder& destination) 
-{
-    if (this == &destination) 
-    {
-        return true; 
-    }
+// bool Folder::moveFileTo(const std::string& name, Folder& destination) 
+// {
+//     if (this == &destination) 
+//     {
+//         return true; 
+//     }
 
-    for (auto it = files_.begin(); it != files_.end(); ++it) 
-    {
-        if (it->getName() == name) 
-         {
-            if (!destination.addFile(std::move(*it))) 
-            {
-                return false; 
-            }
-            files_.erase(it);
-            return true;
-        }
-    }
-    return false; 
-}
+//     for (auto it = files_.begin(); it != files_.end(); ++it) 
+//     {
+//         if (it->getName() == name) 
+//          {
+//             if (!destination.addFile(std::move(*it))) 
+//             {
+//                 return false; 
+//             }
+//             files_.erase(it);
+//             return true;
+//         }
+//     }
+//     return false; 
+// }
 
-bool Folder::copyFileTo(const std::string& name, Folder& destination) 
-{
-   if (this == &destination) 
-   {
-      return false; 
-   }
+// bool Folder::copyFileTo(const std::string& name, Folder& destination) 
+// {
+//    if (this == &destination) 
+//    {
+//       return false; 
+//    }
 
-   for (const File& file : files_) 
-   {
-      if (file.getName() == name) 
-      {
-         if (!destination.addFile(File(file))) 
-         {
-            return false; 
-         }
-            return true;
-      }
-   }
-    return false;
-}
+//    for (const File& file : files_) 
+//    {
+//       if (file.getName() == name) 
+//       {
+//          if (!destination.addFile(File(file))) 
+//          {
+//             return false; 
+//          }
+//             return true;
+//       }
+//    }
+//     return false;
+// }

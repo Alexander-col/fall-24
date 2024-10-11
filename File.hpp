@@ -68,19 +68,19 @@ class File {
       * @note You'll notice we provide a default value for the first possible argument (filename)
       *       Yes, this means we can define override the default constructor and define a parameterized one simultaneously.
       */
-      File(const std::string& filename, const std::string& contents, int* icon);
-
+      File(const std::string& filename, std::string contents, int* icon);
       /**
       * @brief Calculates and returns the size of the File Object (IN BYTES), using .size()
       * @return size_t The number of bytes the File's contents consumes
       * @note Consider this: how does this relate to the string's length? Why is that the case?
       */
       size_t getSize()const;
+
       /**
        * @brief (COPY CONSTRUCTOR) Constructs a new File object as a deep copy of the target File
        * @param rhs A const reference to the file to be copied from
        */
-       File(const File& rhs);
+      File(const File& rhs);
 
       /**
        * @brief (COPY ASSIGNMENT) Replaces the calling File's data members using a deep copy of the rhs File.
@@ -90,6 +90,7 @@ class File {
        * @note If copy assignment operator is invoked upon itself, do nothing.
        */
       File& operator=(const File& rhs);
+
 
       /**
        * @brief (MOVE CONSTRUCTOR) Construct a new File object by moving the data from the righthand side File Object
@@ -110,11 +111,12 @@ class File {
        *    - ALl pointers are set to nullptr
        * @note If move assignment operator is invoked upon itself, do nothing.
        */
-      File& operator=(File&& rhs);
+      File &operator=(File&& rhs); 
       
       /**
        * @brief (DESTRUCTOR) Routine for object deletion
        * @post All dynamically allocated memory is released
        */
-       ~File();
+        ~File();
+
 };

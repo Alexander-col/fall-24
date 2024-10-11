@@ -43,57 +43,56 @@ bool File::operator<(const File& rhs) const {
 
 // =========================== YOUR CODE HERE ===========================
 
-File::File(const std::string& filename, std::string contents, int* icon):contents_(contents)
+size_t File::getSize() const
 {
-    int periodCount = 0;
+    return ICON_DIM;
+}
+
+File::File(const std::string&& filename, std::string contents, int* icon):contents_(contents)
+{
+    int periodCount = 0; 
     for(char c : filename)
     {
-        if(!std::isalnum(c) && c!= '.')
+        if(!std::isalnum(c) && c!= ',')
         {
             throw InvalidFormatException();
-        }else if(c == ',')
+        }else if(c== '.')
         {
             periodCount++;
         }
     }
-
     if(filename == "")
     {
-        filename_ == "NewFile.txt";
-    }else if (periodCount > 1)
+        filename_ = "NewFile.txt";
+    }else if(periodCount > 1)
     {
         throw InvalidFormatException();
-    }else if (periodCount == 0)
+    } else if(periodCount == 0)
     {
         filename_ = filename + ".txt";
-    }
-    else if (filename[filename.size()-1] == '.')
+    }else if(filename[filename.size()-1] == '.')
     {
         filename_ = filename + "txt";
-    }else 
+    }
+    else
     {
         filename_ = filename;
     }
 
+}
+
+File::File(const File& rhs) : filename_(rhs.filename_), contents_(rhs.contents_) 
+{
+    // Deep copy the icon array
     icon_ = new int[ICON_DIM];
-    }
-
-
-size_t File::getSize() const
+    for (size_t i = 0; i < ICON_DIM; ++i) 
 {
-return filename_.size() + contents_.size() + (ICON_DIM * sizeof(int));
+    icon_[i] = rhs.icon_[i];
+}
 }
 
-File::File(const File& rhs) :
-    filename_(rhs.filename_),
-    contents_(rhs.contents_),
-    icon_(new int[ICON_DIM]) 
-    {
-    std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
-}
 
-File& File::operator=(const File& rhs) 
-{
+File& File::operator=(const File& rhs) {
     if (this != &rhs) {
         filename_ = rhs.filename_;
         contents_ = rhs.contents_;
@@ -101,21 +100,23 @@ File& File::operator=(const File& rhs)
         // Delete the old icon array
         delete[] icon_;
 
-        // Create a new icon array and copy elements
+        // Copy the icon array using a loop
         icon_ = new int[ICON_DIM];
-        std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
+        for (size_t i = 0; i < ICON_DIM; ++i) {
+            icon_[i] = rhs.icon_[i];
+        }
     }
     return *this;
 }
 
-File::File(File&& rhs) :
-    filename_(std::move(rhs.filename_)),
-    contents_(std::move(rhs.contents_)),
-    icon_(rhs.icon_) 
-    {
-    rhs.icon_ = nullptr;
+File::File(File&& rhs)
+{
+    filename_ = std::move(rhs.filename_);
+    contents_ = std::move(rhs.contents_);
+    icon_ = new int[ICON_DIM];
+    std::copy(rhs.icon_, rhs.icon_ + ICON_DIM, icon_);
 }
-    
+
 File& File::operator=(File&& rhs) 
 {
     if (this != &rhs) {
@@ -133,4 +134,3 @@ File& File::operator=(File&& rhs)
 File::~File() {
     delete[] icon_;
 }
-
