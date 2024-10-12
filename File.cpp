@@ -69,10 +69,8 @@ File::File(const std::string& filename, std::string contents, int* icon)
         filename_ = filename + ".txt";
     }
 
-        // Allocate memory for the icon array
     icon_ = new int[ICON_DIM];
 
-    // Copy the icon array if provided
     if (icon) 
     {
         std::copy(icon, icon + ICON_DIM, icon_);
