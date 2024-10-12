@@ -74,7 +74,7 @@ File::File(const std::string& filename, const std::string& contents, int* icon)
    }
    }
 
-// // Below is Naima's code
+// // Below is N's code
 // File::File(const std::string& filename, std::string& contents, int* icon):contents_(contents)
 // {
 //    int periodCount = 0;
